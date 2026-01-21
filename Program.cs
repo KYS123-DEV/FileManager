@@ -1,3 +1,6 @@
+using FileManager.Services;
+using Microsoft.Data.SqlClient;
+
 namespace FileManager
 {
   public class Program
@@ -6,41 +9,32 @@ namespace FileManager
     {
       var builder = WebApplication.CreateBuilder(args);
 
-      // Add services to the container.
+      // 컨테이너 등록
+      builder.Services.AddScoped<FileService>();
       builder.Services.AddAuthorization();
-
       var app = builder.Build();
 
-      // Configure the HTTP request pipeline.
+      // 미들웨어
       var options = new DefaultFilesOptions();
       options.DefaultFileNames.Clear();
       options.DefaultFileNames.Add("main.html");
       app.UseDefaultFiles(options);
       app.UseStaticFiles();
-      app.UseAuthorization();
       app.UseHttpsRedirection();
+      app.UseAuthorization();
 
-      /*            var summaries = new[]
-                  {
-                      "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-                  };*/
+      // endpoint 등록
+      RegisterAppEndPoints(app);
 
-      /*            app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-                  {
-                      var forecast = Enumerable.Range(1, 5).Select(index =>
-                          new WeatherForecast
-                          {
-                              Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                              TemperatureC = Random.Shared.Next(-20, 55),
-                              Summary = summaries[Random.Shared.Next(summaries.Length)]
-                          })
-                          .ToArray();
-                      return forecast;
-                  });
-      */
-
-      
+      //실행
       app.Run();
+    }
+
+    //엔드포인트 종합 등록
+    static void RegisterAppEndPoints(IEndpointRouteBuilder commonEndPoints)
+    {
+      ICommonEndPoints fileApi = new FileEndpoints();
+      fileApi.MapEndPoints(commonEndPoints);
     }
   }
 }
