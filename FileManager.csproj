@@ -16,11 +16,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Libs\" />
     <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CommonUtilsDev">
+      <HintPath>Libs\CommonUtilsDev.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

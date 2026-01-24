@@ -6,9 +6,19 @@
   <script type="module" src="./js/app.js"></script>
 </head>
 <body>
+
   <h1>파일 업로드</h1>
-  <label for="lbl-file1"></label>
-  <input type="file" id="lbl-file1" name="filedata" accept=".pdf, .hwp, .zip" />
+  <form id="form-fileupload" methpd="post" enctype="multipart/form-data">
+    <div>
+      <label for="lbl-file1">파일을 선택하세요.</label>
+      <input type="file"
+             id="input-file"
+             name="filedata"
+             accept=".pdf, .hwp, .zip, .txt"
+             multiple/>
+    </div>
+    <div><button type="submit" id="btn-fileupload">파일 올리기</button></div>
+  </form>
   <hr>
   <br />
 

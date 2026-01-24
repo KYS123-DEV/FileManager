@@ -16,4 +16,14 @@ export async function getFiles() {
 /******************************
 서버로 파일 업로드 하기
 *******************************/
+export async function saveFiles(formElement) {
+  const formData = new FormData(formElement);
 
+  const response = await fetch('/api/files/upload', {
+    method: 'POST',
+    body: formData
+  });
+
+  if (!response.ok) throw new Error("파일 저장 실패");
+  return await response.json();
+}

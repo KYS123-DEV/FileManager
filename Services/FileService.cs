@@ -1,4 +1,5 @@
 ﻿using FileManager.DTO;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Data;
@@ -14,12 +15,17 @@ namespace FileManager.Services
       _connStr = config.GetConnectionString("DBConnectionInfo")!;
     }
 
+    /// <summary>
+    /// 파일 목록 불러오기
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public async Task<List<FileDTO>> GetFileListAsync<T>()
     {
       try
       {
         var list = new List<FileDTO>();
-        string query = "SELECT FileNo, FileKind, FileNm, FileSize, EntryDt FROM syfile01t";
+        string query = "SELECT FileNo, FileKind, FileNm, FileSize, EntryDt FROM syfile01t ORDER BY EntryDt DESC";
         using var conn = new SqlConnection(_connStr);
         using var cmd = new SqlCommand(query, conn);
 
@@ -30,7 +36,7 @@ namespace FileManager.Services
         {
           list.Add(new FileDTO
           {
-            FileNo = reader.GetString("FileNo"),
+            FileNo = reader.GetInt64("FileNo"),
             FileKind = reader.GetString("FileKind"),
             FileNm = reader.GetString("FileNm"),
             FileSize = reader.GetInt32("FileSize"),
@@ -44,6 +50,40 @@ namespace FileManager.Services
       {
         throw;
       }
+    }
+
+    /// <summary>
+    /// 파일 업로드
+    /// </summary>
+    /// <param name="files"></param>
+    /// <returns></returns>
+    public async Task<bool> UploadFileAsync(IFormFileCollection files)
+    {
+      using var conn = new SqlConnection(_connStr);
+      await conn.OpenAsync();
+      using var cmd = new SqlCommand("dbo.usp_fileupdate_id", conn);
+      cmd.CommandType = CommandType.StoredProcedure;
+
+      foreach (var file in files)
+      {
+        using var ms = new MemoryStream();
+        await file.CopyToAsync(ms);
+        byte[] fileBytes = ms.ToArray();
+
+        cmd.Parameters.Clear();
+        cmd.Parameters.AddWithValue("@p_transaction_mode", "i");
+        cmd.Parameters.AddWithValue("@p_fileKind", "");
+        cmd.Parameters.AddWithValue("@p_fileNm", file.FileName);
+        cmd.Parameters.AddWithValue("@p_fileData", fileBytes);
+        cmd.Parameters.AddWithValue("@p_fileSize", fileBytes.Length);
+        cmd.Parameters.AddWithValue("@p_entryId", "");
+
+        var result = await cmd.ExecuteScalarAsync();
+
+        if (result == null || Convert.ToInt16(result) < 0)
+          return false;
+      }
+      return true;
     }
   }
 }
