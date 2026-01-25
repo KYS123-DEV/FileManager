@@ -45,7 +45,7 @@ namespace FileManager
     //엔드포인트 종합 등록
     static void RegisterAppEndPoints(IEndpointRouteBuilder commonEndPoints)
     {
-      ICommonEndPoints fileApi = new FileEndpoints();
+      ICommonEndPoints fileApi = new FileEndPoints();
       fileApi.MapEndPoints(commonEndPoints);
     }
   }

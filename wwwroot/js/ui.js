@@ -11,11 +11,29 @@ export async function updateFileTable(files) {
   const tbody = document.getElementById('tby-file');
   tbody.innerHTML = files.map(file => `
   <tr>
-    <td>${file.fileNo}</td>
+    <td class="td-fileno">${file.fileNo}</td>
     <td>${file.fileKind}</td>
-    <td>${file.fileNm}</td>
+    <td class="td-filenm">${file.fileNm}</td>
     <td>${file.fileSize}</td>
     <td>${file.entryDt}</td>
   </tr>
   `).join('');
+
+  //파일명 CSS 추가 함수 호출
+  addFileNameCss();
+}
+
+/******************************
+ 파일명 css 추가
+ *******************************/
+export async function addFileNameCss() {
+  const fileNameCells = document.querySelectorAll('.td-filenm');
+  if (fileNameCells) {
+    fileNameCells.forEach(cell => {
+      cell.style.color = 'blue';
+      cell.style.fontWeight = 'bold';
+      cell.style.textDecoration = 'underline';
+      cell.style.cursor = 'pointer';
+    });
+  }
 }

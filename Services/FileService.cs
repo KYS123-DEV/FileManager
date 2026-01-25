@@ -1,7 +1,5 @@
 ﻿using FileManager.DTO;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Diagnostics;
 
@@ -43,11 +41,11 @@ namespace FileManager.Services
             EntryDt = reader.GetString("EntryDt")
           });
         }
-
         return list;
       }
       catch (Exception ex)
       {
+        Debug.WriteLine($"{ex.StackTrace} [+] {ex.Message}");
         throw;
       }
     }
@@ -59,31 +57,68 @@ namespace FileManager.Services
     /// <returns></returns>
     public async Task<bool> UploadFileAsync(IFormFileCollection files)
     {
-      using var conn = new SqlConnection(_connStr);
-      await conn.OpenAsync();
-      using var cmd = new SqlCommand("dbo.usp_fileupdate_id", conn);
-      cmd.CommandType = CommandType.StoredProcedure;
-
-      foreach (var file in files)
+      try
       {
-        using var ms = new MemoryStream();
-        await file.CopyToAsync(ms);
-        byte[] fileBytes = ms.ToArray();
+        using var conn = new SqlConnection(_connStr);
+        await conn.OpenAsync();
+        using var cmd = new SqlCommand("dbo.usp_fileupdate_id", conn);
+        cmd.CommandType = CommandType.StoredProcedure;
 
-        cmd.Parameters.Clear();
-        cmd.Parameters.AddWithValue("@p_transaction_mode", "i");
-        cmd.Parameters.AddWithValue("@p_fileKind", "");
-        cmd.Parameters.AddWithValue("@p_fileNm", file.FileName);
-        cmd.Parameters.AddWithValue("@p_fileData", fileBytes);
-        cmd.Parameters.AddWithValue("@p_fileSize", fileBytes.Length);
-        cmd.Parameters.AddWithValue("@p_entryId", "");
+        foreach (var file in files)
+        {
+          using var ms = new MemoryStream();
+          await file.CopyToAsync(ms);
+          byte[] fileBytes = ms.ToArray();
 
-        var result = await cmd.ExecuteScalarAsync();
+          cmd.Parameters.Clear();
+          cmd.Parameters.AddWithValue("@p_transaction_mode", "i");
+          cmd.Parameters.AddWithValue("@p_fileKind", "");
+          cmd.Parameters.AddWithValue("@p_fileNm", file.FileName);
+          cmd.Parameters.AddWithValue("@p_fileData", fileBytes);
+          cmd.Parameters.AddWithValue("@p_fileSize", fileBytes.Length);
+          cmd.Parameters.AddWithValue("@p_entryId", "");
 
-        if (result == null || Convert.ToInt16(result) < 0)
-          return false;
+          var result = await cmd.ExecuteScalarAsync();
+
+          if (result == null || Convert.ToInt16(result) < 0)
+            return false;
+        }
+        return true;
       }
-      return true;
+      catch (Exception ex)
+      {
+        Debug.WriteLine($"{ex.StackTrace} [+] {ex.Message}");
+        throw;
+      }
+    }
+
+    public async Task<(byte[] fileData, string fileNm)> DownloadFileByNoAsync(string fileNo)
+    {
+      try
+      {
+        using var conn = new SqlConnection(_connStr);
+        await conn.OpenAsync();
+        
+        string query = "SELECT filedata, filenm FROM syfile01t WHERE fileno = @p_fileNo";
+        using var cmd = new SqlCommand(query, conn);
+        cmd.Parameters.AddWithValue("@p_fileNo", Convert.ToInt64(fileNo));
+
+        using var reader = await cmd.ExecuteReaderAsync();
+
+        if (await reader.ReadAsync())
+        {
+          byte[] fileData = (byte[]) reader["filedata"];
+          string fileNm = reader.GetString("filenm");
+          return (fileData, fileNm);
+        }
+
+        return (null, string.Empty);
+      }
+      catch (Exception ex)
+      {
+        Debug.WriteLine($"{ex.StackTrace} [+] {ex.Message}");
+        throw;
+      }
     }
   }
 }
