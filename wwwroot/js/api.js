@@ -5,11 +5,11 @@
 */
 
 /******************************
-서버에서 파일 목록 가져오기
+파일 목록 조회하기
 *******************************/
-export async function getFiles() {
+export async function getFiles(searchValue) {
   try {
-    const response = await fetch('/api/files');
+    const response = await fetch(`/api/files/${searchValue}`);
     if (!response.ok) throw new Error("목록 조회 실패");
 
     return await response.json();

@@ -3,24 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <title>파일 관리 Page</title>
-  <script type="module" src="./js/app.js"></script>
 </head>
 <body>
-
   <h1>파일 업로드</h1>
-  <form id="form-fileupload" methpd="post" enctype="multipart/form-data">
+  <form id="form-fileupload" method="post" enctype="multipart/form-data">
     <div>
-      <label for="lbl-file1">파일을 선택하세요.</label>
+      <label>파일을 선택하세요.</label>
       <input type="file"
              id="input-file"
              name="filedata"
              accept=".pdf, .hwp, .zip, .txt"
-             multiple/>
+             multiple />
     </div>
     <div><button type="submit" id="btn-fileupload">파일 올리기</button></div>
   </form>
   <hr>
   <br />
+
+  <form id="form-search">
+    <input type="text" id="input-search" placeholder="파일명으로 검색..." />
+    <button type="submit">검색</button>
+  </form>
 
   <section id="sc-file">
     <h3>저장된 파일 목록</h3>
@@ -41,6 +44,6 @@
       </tbody>
     </table>
   </section>
-
+  <script type="module" src="./js/app.js"></script>
 </body>
 </html>

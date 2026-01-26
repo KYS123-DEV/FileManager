@@ -18,7 +18,7 @@ export async function updateFileTable(files) {
     <td>${file.entryDt}</td>
   </tr>
   `).join('');
-
+  
   //파일명 CSS 추가 함수 호출
   addFileNameCss();
 }

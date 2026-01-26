@@ -2,6 +2,8 @@
 using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Diagnostics;
+using CommonUtilsDev;
+using System.Globalization;
 
 namespace FileManager.Services
 {
@@ -18,16 +20,22 @@ namespace FileManager.Services
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public async Task<List<FileDTO>> GetFileListAsync<T>()
+    public async Task<List<FileDTO>> GetFileListAsync<T>(string searchValue)
     {
       try
       {
         var list = new List<FileDTO>();
-        string query = "SELECT FileNo, FileKind, FileNm, FileSize, EntryDt FROM syfile01t ORDER BY EntryDt DESC";
+        string query = 
+          " SELECT FileNo, FileKind, FileNm, FileSize, EntryDt" +
+          " FROM syfile01t" +
+          " WHERE FileNm LIKE '%' + @p_searchValue + '%'" +
+          " ORDER BY EntryDt DESC";
         using var conn = new SqlConnection(_connStr);
         using var cmd = new SqlCommand(query, conn);
+        cmd.Parameters.AddWithValue("@p_searchValue", searchValue);
 
         await conn.OpenAsync();
+
         using var reader = await cmd.ExecuteReaderAsync();
 
         while (await reader.ReadAsync())

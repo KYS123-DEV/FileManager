@@ -9,15 +9,17 @@ import { updateFileTable } from './ui.js';
 
 const formFileUpload = document.getElementById('form-fileupload');
 const inputFile = document.getElementById('input-file');
+const formSearch = document.getElementById('form-search');
+const inputSearch = document.getElementById('input-search');
 const tblFile = document.getElementById('tbl-file');
 
 /******************************
-서버에서 파일 목록 가져오기
+파일 목록 조회하기
 *******************************/
 async function init() {
   try
   {
-    const files = await getFiles();
+    const files = await getFiles("%");
     if (files) updateFileTable(files);
   }
   catch (error)
@@ -52,8 +54,6 @@ formFileUpload.addEventListener('submit', async (e) => {
 
 /******************************
 파일을 다운로드 & Open
-
-수정 중....
 *******************************/
 const downloadFile = async (e) => {
   const target = e.target;
@@ -80,6 +80,22 @@ const downloadFile = async (e) => {
 }
 tblFile.addEventListener('click', downloadFile);
 
+/******************************
+파일명 검색란에 Enter 키 눌러서 자료 조회하기
+*******************************/
+formSearch.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const searchValue = inputSearch.value.trim();
+  try
+  {
+    const files = await getFiles(searchValue);
+    if (files) updateFileTable(files);
+  }
+  catch (error)
+  {
+    alert("검색 중 에러 발생:", error.message);
+  }
+});
 
 /******************************
 함수 호출 SECTION

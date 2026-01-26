@@ -1,4 +1,4 @@
-﻿using CommonUtilsDe;
+﻿using CommonUtilsDev;
 using FileManager.DTO;
 
 namespace FileManager.Services
@@ -14,11 +14,11 @@ namespace FileManager.Services
       var group = app.MapGroup("/api/files");
 
       //10. Get 파일 목록 조회
-      group.MapGet("/", async (FileService fileService) =>
+      group.MapGet("/{searchValue}", async (string searchValue, FileService fileService) =>
       {
         try
         {
-          var files = await fileService.GetFileListAsync<FileDTO>();
+          var files = await fileService.GetFileListAsync<FileDTO>(searchValue);
           return Results.Ok(files);
         }
         catch (Exception)
