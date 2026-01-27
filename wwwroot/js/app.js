@@ -6,6 +6,7 @@
 
 import { getFiles, saveFiles, downloadFileByNo } from './api.js';
 import { updateFileTable } from './ui.js';
+import { alertSuccess }  from './ui2.js';
 
 const formFileUpload = document.getElementById('form-fileupload');
 const inputFile = document.getElementById('input-file');
@@ -43,7 +44,7 @@ formFileUpload.addEventListener('submit', async (e) => {
     if (result)
     {
       await init();
-      alert("파일 업로드 성공!");
+      alertSuccess("파일 업로드 성공!");
       formFileUpload.reset();
     }
 

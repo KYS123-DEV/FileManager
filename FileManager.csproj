@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\login.html" />
-    <None Include="wwwroot\main.html" />
+    <None Include="wwwroot\index.html" />
   </ItemGroup>
 
   <ItemGroup>
