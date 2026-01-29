@@ -4,6 +4,30 @@
 상세     : 서버 주소나 fetch 로직이 바뀌어도 이 파일만 수정하면 됨.
 */
 
+
+/******************************
+로그인 처리
+*******************************/
+export async function callLoginApi(formElement) {
+
+  const userId = formElement.userId.value;
+  const password = formElement.userId.password;
+
+  try
+  {
+    if (!userId || !password) throw new Error('아이디 또는 비밀번호를 입력하세요.');
+
+    const response = await fetch('/api/files/login');
+    if (!response.ok) throw new Error("로그인 실패!");
+    return true;
+  }
+  catch (error)
+  {
+    throw error;
+  }
+}
+
+
 /******************************
 파일 목록 조회하기
 *******************************/

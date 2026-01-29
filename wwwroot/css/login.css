@@ -1,0 +1,131 @@
+﻿/* 공통 변수 선언 */
+/* EX) 버튼 색, 글자 크기, 글자 색 etc... */
+
+body {
+  background-image: url("/image/login_background.png");
+  background-size: cover;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+  button:hover {
+    opacity: 0.8;
+  }
+  button[type=submit] {
+    font-size: 25px;
+  }
+
+/* Center the image and position the close button */
+.imgcontainer {
+  text-align: center;
+  margin: 12px;
+  position: relative;
+}
+
+.container {
+  padding: 8px;
+}
+
+.title_text_container {
+  text-align: center;
+}
+
+.title_text {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* The Modal (background) */
+.modal {
+  display: block; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  backdrop-filter: blur(5px);
+  padding-top: 60px;
+}
+
+.avatar {
+  width: 30%;
+  border-radius: 50%;
+}
+
+/* Modal ContentBox */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 500px; /* Could be more or less, depending on screen size */
+}
+
+/* SSO GROUP CSS */
+/* 구분선 스타일 */
+.divider {
+  margin: 20px 0;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  line-height: 0.1em;
+}
+  .divider span {
+    background: #fff; /* 하얀 박스 배경과 맞춤 */
+    padding: 0 10px;
+    color: #888;
+    font-size: 12px;
+  }
+
+/* SSO 버튼 그룹 레이아웃 */
+.sso-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 10px; /* 박스 하단 테두리와의 여백 확보 */
+}
+
+/* 개별 버튼 공통 스타일 */
+.sso-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* 원형 버튼 */
+  border: none;
+  cursor: pointer;
+  background-color: black;
+  transition: transform 0.2s; /* 부드러운 확대 효과 */
+
+  display: inline-flex; /* 내부 요소를 flex로 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  padding: 0; /* 기본 패딩 제거 */
+}
+  /* 아이콘 크기 및 색상 조정 */
+  .sso-btn i {
+    font-size: 20px;
+    color: white;
+    line-height: 1;          /* 텍스트 높이로 인한 치우침 방지 */
+  }
+  .sso-btn:hover {
+    transform: scale(1.1); /* 마우스 올리면 살짝 커짐 */
+  }

@@ -27,8 +27,7 @@ namespace FileManager
       // 미들웨어
       var options = new DefaultFilesOptions();
       options.DefaultFileNames.Clear();
-      options.DefaultFileNames.Add("index.html");
-      //options.DefaultFileNames.Add("login.html");
+      options.DefaultFileNames.Add("login.html");
       app.UseDefaultFiles(options);
       app.UseStaticFiles();
       app.UseHttpsRedirection();

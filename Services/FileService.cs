@@ -100,6 +100,11 @@ namespace FileManager.Services
       }
     }
 
+    /// <summary>
+    /// 파일 다운로드
+    /// </summary>
+    /// <param name="fileNo"></param>
+    /// <returns></returns>
     public async Task<(byte[] fileData, string fileNm)> DownloadFileByNoAsync(string fileNo)
     {
       try
